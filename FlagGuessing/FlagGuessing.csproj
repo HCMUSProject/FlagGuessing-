@@ -65,6 +65,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -78,6 +79,36 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Anh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Argentina.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BoDaoNha.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\congo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cuba.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Finland.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ireland.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ThoNhiKy.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\uzbekistan.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
