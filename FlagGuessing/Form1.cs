@@ -26,6 +26,12 @@ namespace FlagGuessing
         int nQuestion = -1, posTrue = -1;
         string strQuestion = "Đâu là lá cờ của ";
 
+        Time totalTime = new Time(0, 0, 10);
+
+        const int markPerSecond = 10;
+
+        int currentRound = 1, totalRound = 10;
+
         private string GetFlagName(string source)
         {
             string strName = "";
@@ -55,6 +61,7 @@ namespace FlagGuessing
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             //this.Width = 800;
             this.Height = 500;
 
@@ -68,7 +75,7 @@ namespace FlagGuessing
             PanelGamePlay.Height = this.Height - PanelGamePlay.Top;
             PanelControl.Height = PanelGamePlay.Height;
 
-            txtTimes.Text = "0/" + totalRound.ToString();
+            txtTimes.Text = currentRound.ToString() + "/" + totalRound.ToString();
             txtScore.Text = "0";
 
             btnChoose1.Enabled = false;
@@ -134,7 +141,7 @@ namespace FlagGuessing
             return posTrue;
         }
 
-        int round = 0, totalRound = 10;
+        
 
         private void RoundPlaying()
         {
@@ -142,40 +149,118 @@ namespace FlagGuessing
             posTrue = RandomFlagsToPictureBox(nQuestion);
             lbQuestion.Text = strQuestion + listFlags[nQuestion].Name + " ?";
 
-            round++;
-            txtTimes.Text = round.ToString() + "/" + totalRound.ToString();
+            txtTimes.Text = currentRound.ToString() + "/" + totalRound.ToString();
         }
-        
+
+        Time timeLeft = new Time();
+        private void Clock_Tick(object sender, EventArgs e)
+        {
+            if (timeLeft.ToSecond() > 0)
+            {
+                timeLeft--;
+                lbSeconds.Text = timeLeft.getStringSecond();
+            }
+            else
+            {
+                if (currentRound < totalRound)
+                {
+                    currentRound++;
+                    RoundPlaying();
+                    timeLeft.assign(totalTime);
+                    lbMinutes.Text = timeLeft.getStringMinute();
+                    lbSeconds.Text = timeLeft.getStringSecond();
+                    Clock.Start();
+                }
+                else
+                {
+                    // end match
+                    isStarted = false;
+
+                    btnChoose1.Enabled = false;
+                    btnChoose2.Enabled = false;
+                    lb_notification.Text = "Ván chơi kết thúc !";
+                }
+            }
+        }
+
         private void btnChoose1_Click(object sender, EventArgs e)
         {
+            Clock.Stop();
             if (posTrue == 1)
             {
-                // đáp án đúng
-                MessageBox.Show("true");
+                //đáp án đúng
+                //MessageBox.Show("true");
+
+                double percent = Convert.ToDouble(timeLeft.ToSecond()) / totalTime.ToSecond();
+                int mark = Convert.ToInt32(System.Math.Floor(markPerSecond * percent));
+                int oldMark = Convert.ToInt32(txtScore.Text);
+                txtScore.Text = (oldMark + mark).ToString();
             }
-            
-            RoundPlaying();
+            if (currentRound < totalRound)
+            {
+                currentRound++;
+                RoundPlaying();
+                timeLeft.assign(totalTime);
+                lbMinutes.Text = timeLeft.getStringMinute();
+                lbSeconds.Text = timeLeft.getStringSecond();
+                Clock.Start();
+            }
+            else
+            {
+                // end match
+                isStarted = false;
+
+                btnChoose1.Enabled = false;
+                btnChoose2.Enabled = false;
+                lb_notification.Text = "Ván chơi kết thúc !";
+            }
         }
-        
 
         private void btnChoose2_Click(object sender, EventArgs e)
         {
+            Clock.Stop();
             if (posTrue == 2)
             {
                 // đáp án đúng
-                MessageBox.Show("true");
+                //MessageBox.Show("true");
+
+                double percent = Convert.ToDouble(timeLeft.ToSecond()) / totalTime.ToSecond();
+                int mark = Convert.ToInt32(System.Math.Floor(markPerSecond * percent));
+                int oldMark = Convert.ToInt32(txtScore.Text);
+                txtScore.Text = (oldMark + mark).ToString();
             }
-            RoundPlaying();
+            if (currentRound < totalRound)
+            {
+                currentRound++;
+                RoundPlaying();
+                timeLeft.assign(totalTime);
+                lbMinutes.Text = timeLeft.getStringMinute();
+                lbSeconds.Text = timeLeft.getStringSecond();
+                Clock.Start();
+            }
+            else
+            {
+                // end match
+                isStarted = false;
+
+                btnChoose1.Enabled = false;
+                btnChoose2.Enabled = false;
+                lb_notification.Text = "Ván chơi kết thúc !";
+            }
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             if (isStarted == false)
             {
-                round = 0;
-                
+                currentRound = 1;
+
                 // khơi tạo câu hỏi ban đầu
                 RoundPlaying();
+                timeLeft.assign(totalTime);
+                lbMinutes.Text = timeLeft.getStringMinute();
+                lbSeconds.Text = timeLeft.getStringSecond();
+                Clock.Start();
 
                 isStarted = true;
                 btnChoose1.Enabled = true;
@@ -183,6 +268,41 @@ namespace FlagGuessing
                 btnRestart.Enabled = true;
                 btnStart.Enabled = false;
             }
+        }
+
+        private void btnRestart_Click(object sender, EventArgs e)
+        {
+            // dừng countdown, xoá time
+            Clock.Stop();
+            lbMinutes.Text = "00";
+            lbSeconds.Text = "00";
+            // lưu điểm
+            DialogResult saveScore = MessageBox.Show("Bạn có muốn lưu điểm?","Thông báo",
+                MessageBoxButtons.YesNo,MessageBoxIcon.Information);
+
+            if (saveScore == DialogResult.Yes)  // nếu lưu
+            {
+                MessageBox.Show("saved");
+            }
+
+            // xoá lượt chơi, xoá notify, xoá điểm số, xoá pictureBox, xoá câu hỏi
+            currentRound = 1;
+            txtTimes.Text = currentRound.ToString() + "/" + totalRound.ToString();
+            lb_notification.Text = "";
+            txtScore.Text = "0";
+
+            pictureBox1.Image = null;
+            pictureBox2.Image = null;
+
+            lbQuestion.Text = "";
+
+
+            // enable button start và disable button restart
+            isStarted = false;
+            btnStart.Enabled = true;
+            btnRestart.Enabled = false;
+            btnChoose1.Enabled = false;
+            btnChoose2.Enabled = false;
         }
     }
 
@@ -217,12 +337,12 @@ namespace FlagGuessing
         {
             iHour = iMinute = iSecond = 0;
         }
-        //public Time(int h, int m, int s)
-        //{
-        //    iHour = h;
-        //    iMinute = m;
-        //    iSecond = s;
-        //}
+        public Time(int h, int m, int s)
+        {
+            iHour = h;
+            iMinute = m;
+            iSecond = s;
+        }
 
         public int Hour
         {
@@ -314,6 +434,13 @@ namespace FlagGuessing
             }
 
             return root;
+        }
+
+        public void assign(Time t1)
+        {
+            this.Hour = t1.Hour;
+            this.Minute = t1.Minute;
+            this.Second = t1.Second;
         }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.PanelControl = new System.Windows.Forms.Panel();
             this.grbCustom = new System.Windows.Forms.GroupBox();
             this.btnRestart = new System.Windows.Forms.Button();
@@ -44,6 +45,7 @@
             this.lb_times = new System.Windows.Forms.Label();
             this.lb_score = new System.Windows.Forms.Label();
             this.PanelGamePlay = new System.Windows.Forms.Panel();
+            this.lb_notification = new System.Windows.Forms.Label();
             this.grbQuestion = new System.Windows.Forms.GroupBox();
             this.lbQuestion = new System.Windows.Forms.Label();
             this.btnChoose2 = new System.Windows.Forms.Button();
@@ -51,6 +53,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lbTitle = new System.Windows.Forms.Label();
+            this.Clock = new System.Windows.Forms.Timer(this.components);
             this.PanelControl.SuspendLayout();
             this.grbCustom.SuspendLayout();
             this.grbTime.SuspendLayout();
@@ -91,6 +94,7 @@
             this.btnRestart.TabIndex = 2;
             this.btnRestart.Text = "Chơi lại";
             this.btnRestart.UseVisualStyleBackColor = true;
+            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
             // 
             // btnStart
             // 
@@ -117,30 +121,33 @@
             // lbSeconds
             // 
             this.lbSeconds.AutoSize = true;
-            this.lbSeconds.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSeconds.Location = new System.Drawing.Point(162, 44);
+            this.lbSeconds.Font = new System.Drawing.Font("DS-Digital", 28F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSeconds.ForeColor = System.Drawing.Color.Red;
+            this.lbSeconds.Location = new System.Drawing.Point(171, 44);
             this.lbSeconds.Name = "lbSeconds";
-            this.lbSeconds.Size = new System.Drawing.Size(57, 40);
+            this.lbSeconds.Size = new System.Drawing.Size(82, 56);
             this.lbSeconds.TabIndex = 0;
             this.lbSeconds.Text = "00";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(129, 44);
+            this.label2.Font = new System.Drawing.Font("DS-Digital", 28F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Red;
+            this.label2.Location = new System.Drawing.Point(132, 44);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(27, 40);
+            this.label2.Size = new System.Drawing.Size(36, 56);
             this.label2.TabIndex = 0;
             this.label2.Text = ":";
             // 
             // lbMinutes
             // 
             this.lbMinutes.AutoSize = true;
-            this.lbMinutes.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMinutes.Location = new System.Drawing.Point(66, 44);
+            this.lbMinutes.Font = new System.Drawing.Font("DS-Digital", 28F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbMinutes.ForeColor = System.Drawing.Color.Red;
+            this.lbMinutes.Location = new System.Drawing.Point(44, 44);
             this.lbMinutes.Name = "lbMinutes";
-            this.lbMinutes.Size = new System.Drawing.Size(57, 40);
+            this.lbMinutes.Size = new System.Drawing.Size(82, 56);
             this.lbMinutes.TabIndex = 0;
             this.lbMinutes.Text = "00";
             // 
@@ -219,6 +226,7 @@
             // PanelGamePlay
             // 
             this.PanelGamePlay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelGamePlay.Controls.Add(this.lb_notification);
             this.PanelGamePlay.Controls.Add(this.grbQuestion);
             this.PanelGamePlay.Controls.Add(this.btnChoose2);
             this.PanelGamePlay.Controls.Add(this.btnChoose1);
@@ -228,6 +236,15 @@
             this.PanelGamePlay.Name = "PanelGamePlay";
             this.PanelGamePlay.Size = new System.Drawing.Size(618, 650);
             this.PanelGamePlay.TabIndex = 1;
+            // 
+            // lb_notification
+            // 
+            this.lb_notification.AutoSize = true;
+            this.lb_notification.ForeColor = System.Drawing.Color.Red;
+            this.lb_notification.Location = new System.Drawing.Point(160, 548);
+            this.lb_notification.Name = "lb_notification";
+            this.lb_notification.Size = new System.Drawing.Size(0, 20);
+            this.lb_notification.TabIndex = 3;
             // 
             // grbQuestion
             // 
@@ -298,6 +315,11 @@
             this.lbTitle.Text = "TRÒ CHƠI ĐOÁN QUỐC KỲ";
             this.lbTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // Clock
+            // 
+            this.Clock.Interval = 1000;
+            this.Clock.Tick += new System.EventHandler(this.Clock_Tick);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -316,6 +338,7 @@
             this.grbInfo.ResumeLayout(false);
             this.grbInfo.PerformLayout();
             this.PanelGamePlay.ResumeLayout(false);
+            this.PanelGamePlay.PerformLayout();
             this.grbQuestion.ResumeLayout(false);
             this.grbQuestion.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -350,6 +373,8 @@
         private System.Windows.Forms.Label lbQuestion;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnRestart;
+        private System.Windows.Forms.Timer Clock;
+        private System.Windows.Forms.Label lb_notification;
     }
 }
 
