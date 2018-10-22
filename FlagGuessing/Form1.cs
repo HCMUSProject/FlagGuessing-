@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 
 namespace FlagGuessing
@@ -21,16 +22,21 @@ namespace FlagGuessing
             InitializeComponent();
         }
 
+        #region global Variable
+
         List<Flags> listFlags = new List<Flags>();
         private bool isStarted = false;
         int nQuestion = -1, posTrue = -1;
         string strQuestion = "Đâu là lá cờ của ";
 
-        Time totalTime = new Time(0, 0, 10);
+        Time totalTime = new Time(0, 0, 5);
 
         const int markPerSecond = 10;
 
         int currentRound = 1, totalRound = 10;
+
+
+        #endregion
 
         private string GetFlagName(string source)
         {
@@ -158,6 +164,7 @@ namespace FlagGuessing
             if (timeLeft.ToSecond() > 0)
             {
                 timeLeft--;
+                lbMinutes.Text = timeLeft.getStringMinute();
                 lbSeconds.Text = timeLeft.getStringSecond();
             }
             else
@@ -188,9 +195,6 @@ namespace FlagGuessing
             Clock.Stop();
             if (posTrue == 1)
             {
-                //đáp án đúng
-                //MessageBox.Show("true");
-
                 double percent = Convert.ToDouble(timeLeft.ToSecond()) / totalTime.ToSecond();
                 int mark = Convert.ToInt32(System.Math.Floor(markPerSecond * percent));
                 int oldMark = Convert.ToInt32(txtScore.Text);
@@ -221,9 +225,6 @@ namespace FlagGuessing
             Clock.Stop();
             if (posTrue == 2)
             {
-                // đáp án đúng
-                //MessageBox.Show("true");
-
                 double percent = Convert.ToDouble(timeLeft.ToSecond()) / totalTime.ToSecond();
                 int mark = Convert.ToInt32(System.Math.Floor(markPerSecond * percent));
                 int oldMark = Convert.ToInt32(txtScore.Text);
@@ -282,7 +283,7 @@ namespace FlagGuessing
 
             if (saveScore == DialogResult.Yes)  // nếu lưu
             {
-                MessageBox.Show("saved");
+               
             }
 
             // xoá lượt chơi, xoá notify, xoá điểm số, xoá pictureBox, xoá câu hỏi
@@ -304,6 +305,125 @@ namespace FlagGuessing
             btnChoose1.Enabled = false;
             btnChoose2.Enabled = false;
         }
+    }
+
+    public class XmlScoreUser
+    {
+        private List<User> _listUser;
+        private const string xmlHighScoreFileName = "highestScore.xml";
+
+        public List<User> ListUser { get => _listUser; set => _listUser = value; }
+
+        // tối đa 5 user
+
+        private void SortDecreaseScore()
+        {
+            for (int i = 0; i < _listUser.Count - 1; i++)
+            {
+                for (int j = i; j < _listUser.Count; j++)
+                {
+                    if (_listUser[i].Score < _listUser[j].Score)
+                    {
+                        User tmp = new User();
+                        tmp = _listUser[i];
+                        _listUser[i] = _listUser[j];
+                        _listUser[j] = tmp;
+                    }
+                }
+            }
+        }
+
+        public bool addUser(User usr)
+        {
+            foreach (var u in _listUser)
+            {
+                if (u.Name == usr.Name)
+                {
+                    if (u.Score < usr.Score)
+                    {
+                        u.Score = usr.Score;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    _listUser.Add(usr);
+                }
+            }
+
+            this.SortDecreaseScore();
+
+            return true;
+        }
+
+        public void ReadUserScore()
+        {
+            XmlReader xmlReader = XmlReader.Create(xmlHighScoreFileName);
+
+            while (!xmlReader.EOF)
+            {
+                if (xmlReader.MoveToContent() == XmlNodeType.Element && xmlReader.Name == "User")
+                {
+                    User usr = new User();
+                    usr.Name = xmlReader.ReadElementContentAsString();
+                    usr.Score = Convert.ToInt32(xmlReader.GetAttribute(0));
+                    _listUser.Add(usr);
+                }
+            }
+
+
+            this.SortDecreaseScore();
+
+            xmlReader.Close();
+        }
+
+        public void WriteUserScore()
+        {
+            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
+            xmlWriterSettings.Indent = true;
+
+            XmlWriter xmlWriter = XmlWriter.Create(xmlHighScoreFileName, xmlWriterSettings);
+
+            xmlWriter.WriteStartDocument();
+
+            xmlWriter.WriteStartElement("HighScore");
+
+            int count = 0;
+            foreach (var user in _listUser)
+            {
+                if (count == 5)  // ghi tối đa 5 thằng thôi
+                {
+                    break;
+                }
+
+                xmlWriter.WriteStartElement("User");
+                xmlWriter.WriteAttributeString("Score", user.Score.ToString());
+                xmlWriter.WriteString(user.Name);
+                xmlWriter.WriteEndElement();
+
+                count++;
+            }
+
+            xmlWriter.Close();
+        }
+    }
+
+    public class User
+    {
+        private string _name;
+        private int _score;
+        
+        public User()
+        {
+            _name = "";
+            _score = 0;
+        }
+
+        public string Name { get => _name; set => _name = value; }
+        public int Score { get => _score; set => _score = value; }
     }
 
     public class Flags
@@ -414,24 +534,32 @@ namespace FlagGuessing
 
         public static Time operator -- (Time root)
         {
-            if (root.Second - 1 < 0)
+            if (root.ToSecond() % 60 == 0)
             {
-                root.Second = 0;
-                if (root.Minute - 1 < 0)
+                root.Second = 59;
+
+                if (root.Hour >= 1)
                 {
-                    root.Minute = 0;
-                    if (root.Hour < 0)
-                        root.Hour = 0;
+                    if (root.Minute == 0)
+                    {
+                        root.Minute = 59;
+                        root.Hour -= 1;
+                    }
+                    else
+                    {
+                        root.Minute -= 1;
+                    }
                 }
                 else
                 {
-                    root.Minute -= 1;
+                    if (root.Minute > 0)
+                    {
+                        root.Minute -= 1;
+                    }
                 }
             }
             else
-            {
                 root.Second -= 1;
-            }
 
             return root;
         }
