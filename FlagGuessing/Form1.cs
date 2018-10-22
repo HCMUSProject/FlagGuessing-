@@ -37,6 +37,7 @@ namespace FlagGuessing
 
         int currentRound = 1, totalRound = 10;
 
+        User currentUser = new User();
 
         #endregion
 
@@ -71,11 +72,13 @@ namespace FlagGuessing
         {
             
             //this.Width = 800;
-            this.Height = 500;
+            this.Height = 550;
+
+            lbTitle.Top = 50;
 
             // SET POSITION FOR 2 PANELS
             PanelGamePlay.Left = 0;
-            PanelGamePlay.Top = 60;
+            PanelGamePlay.Top = 100;
             PanelGamePlay.Width = System.Convert.ToInt32(System.Math.Floor(this.Width * 0.64));
             PanelControl.Left = PanelGamePlay.Width;
             PanelControl.Top = PanelGamePlay.Top;
@@ -252,25 +255,64 @@ namespace FlagGuessing
             }
         }
 
+        private void changeUsernameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //txtPlayer.Text = "Hiếu";
+            //MessageBox.Show("aaaa");
+
+            using (FormChangeName changeName = new FormChangeName())
+            {
+                if (changeName.ShowDialog() == DialogResult.OK)
+                {
+                    txtPlayer.Text = changeName.getInputName();
+                }
+            }
+            
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void topScoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void btnStart_Click(object sender, EventArgs e)
         {
-            if (isStarted == false)
+            if (txtPlayer.Text.Length == 0)
             {
-                currentRound = 1;
-
-                // khơi tạo câu hỏi ban đầu
-                RoundPlaying();
-                timeLeft.assign(totalTime);
-                lbMinutes.Text = timeLeft.getStringMinute();
-                lbSeconds.Text = timeLeft.getStringSecond();
-                Clock.Start();
-
-                isStarted = true;
-                btnChoose1.Enabled = true;
-                btnChoose2.Enabled = true;
-                btnRestart.Enabled = true;
-                btnStart.Enabled = false;
+                using (FormChangeName changeName = new FormChangeName())
+                {
+                    if (changeName.ShowDialog() == DialogResult.OK)
+                    {
+                        txtPlayer.Text = changeName.getInputName();
+                    }
+                }
             }
+            else
+            {
+                if (isStarted == false)
+                {
+                    currentRound = 1;
+
+                    // khơi tạo câu hỏi ban đầu
+                    RoundPlaying();
+                    timeLeft.assign(totalTime);
+                    lbMinutes.Text = timeLeft.getStringMinute();
+                    lbSeconds.Text = timeLeft.getStringSecond();
+                    Clock.Start();
+
+                    isStarted = true;
+                    btnChoose1.Enabled = true;
+                    btnChoose2.Enabled = true;
+                    btnRestart.Enabled = true;
+                    btnStart.Enabled = false;
+                }
+            }
+                
         }
 
         private void btnRestart_Click(object sender, EventArgs e)
@@ -285,8 +327,7 @@ namespace FlagGuessing
 
             if (saveScore == DialogResult.Yes)  // nếu lưu
             {
-                User currentUser = new User();
-                currentUser.Name = "Đỗ Minh Hiếu";
+                currentUser.Name = txtPlayer.Text;
                 currentUser.Score = Convert.ToInt32(txtScore.Text);
 
                 XmlScoreUser XmlsaveScore = new XmlScoreUser();
@@ -358,8 +399,9 @@ namespace FlagGuessing
             }
         }
 
-        public bool addUser(User usr)
+        public void addUser(User usr)
         {
+            bool isChanged = false;
             if (_listUser.Count > 0)
             {
                 for (int i = 0; i < _listUser.Count; i++)
@@ -369,12 +411,13 @@ namespace FlagGuessing
                         if (_listUser[i].Score < usr.Score)
                         {
                             _listUser[i].Score = usr.Score;
-                        }
-                        else
-                        {
-                            return false;
+                            isChanged = true;
                         }
                     }
+                }
+                if (isChanged == false)
+                {
+                    _listUser.Add(usr);
                 }
             }
             else
@@ -383,8 +426,6 @@ namespace FlagGuessing
             }
 
             this.SortDecreaseScore();
-
-            return true;
         }
 
         public void ReadUserScore()
@@ -396,8 +437,11 @@ namespace FlagGuessing
                 if (xmlReader.MoveToContent() == XmlNodeType.Element && xmlReader.Name == "User")
                 {
                     User usr = new User();
-                    usr.Name = xmlReader.ReadElementContentAsString();
+
                     usr.Score = Convert.ToInt32(xmlReader.GetAttribute("Score"));
+
+                    usr.Name = xmlReader.ReadElementContentAsString();
+                    
                     _listUser.Add(usr);
                 }
                 else

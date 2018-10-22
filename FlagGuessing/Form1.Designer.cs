@@ -50,16 +50,22 @@
             this.lbQuestion = new System.Windows.Forms.Label();
             this.btnChoose2 = new System.Windows.Forms.Button();
             this.btnChoose1 = new System.Windows.Forms.Button();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lbTitle = new System.Windows.Forms.Label();
             this.Clock = new System.Windows.Forms.Timer(this.components);
+            this.Menu = new System.Windows.Forms.MenuStrip();
+            this.optionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeUsernameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.topScoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.PanelControl.SuspendLayout();
             this.grbCustom.SuspendLayout();
             this.grbTime.SuspendLayout();
             this.grbInfo.SuspendLayout();
             this.PanelGamePlay.SuspendLayout();
             this.grbQuestion.SuspendLayout();
+            this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -70,7 +76,7 @@
             this.PanelControl.Controls.Add(this.grbCustom);
             this.PanelControl.Controls.Add(this.grbTime);
             this.PanelControl.Controls.Add(this.grbInfo);
-            this.PanelControl.Location = new System.Drawing.Point(615, 88);
+            this.PanelControl.Location = new System.Drawing.Point(615, 113);
             this.PanelControl.Name = "PanelControl";
             this.PanelControl.Size = new System.Drawing.Size(344, 650);
             this.PanelControl.TabIndex = 0;
@@ -232,7 +238,7 @@
             this.PanelGamePlay.Controls.Add(this.btnChoose1);
             this.PanelGamePlay.Controls.Add(this.pictureBox2);
             this.PanelGamePlay.Controls.Add(this.pictureBox1);
-            this.PanelGamePlay.Location = new System.Drawing.Point(0, 88);
+            this.PanelGamePlay.Location = new System.Drawing.Point(0, 113);
             this.PanelGamePlay.Name = "PanelGamePlay";
             this.PanelGamePlay.Size = new System.Drawing.Size(618, 650);
             this.PanelGamePlay.TabIndex = 1;
@@ -285,6 +291,65 @@
             this.btnChoose1.UseVisualStyleBackColor = true;
             this.btnChoose1.Click += new System.EventHandler(this.btnChoose1_Click);
             // 
+            // lbTitle
+            // 
+            this.lbTitle.AutoSize = true;
+            this.lbTitle.Font = new System.Drawing.Font("Poor Richard", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTitle.Location = new System.Drawing.Point(200, 51);
+            this.lbTitle.Name = "lbTitle";
+            this.lbTitle.Size = new System.Drawing.Size(493, 47);
+            this.lbTitle.TabIndex = 2;
+            this.lbTitle.Text = "TRÒ CHƠI ĐOÁN QUỐC KỲ";
+            this.lbTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // Clock
+            // 
+            this.Clock.Interval = 1000;
+            this.Clock.Tick += new System.EventHandler(this.Clock_Tick);
+            // 
+            // Menu
+            // 
+            this.Menu.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.Menu.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionToolStripMenuItem});
+            this.Menu.Location = new System.Drawing.Point(0, 0);
+            this.Menu.Name = "Menu";
+            this.Menu.Size = new System.Drawing.Size(957, 33);
+            this.Menu.TabIndex = 3;
+            this.Menu.Text = "menuStrip1";
+            // 
+            // optionToolStripMenuItem
+            // 
+            this.optionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.changeUsernameToolStripMenuItem,
+            this.topScoreToolStripMenuItem,
+            this.exitToolStripMenuItem});
+            this.optionToolStripMenuItem.Name = "optionToolStripMenuItem";
+            this.optionToolStripMenuItem.Size = new System.Drawing.Size(80, 29);
+            this.optionToolStripMenuItem.Text = "Option";
+            // 
+            // changeUsernameToolStripMenuItem
+            // 
+            this.changeUsernameToolStripMenuItem.Name = "changeUsernameToolStripMenuItem";
+            this.changeUsernameToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
+            this.changeUsernameToolStripMenuItem.Text = "Change Username";
+            this.changeUsernameToolStripMenuItem.Click += new System.EventHandler(this.changeUsernameToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // topScoreToolStripMenuItem
+            // 
+            this.topScoreToolStripMenuItem.Name = "topScoreToolStripMenuItem";
+            this.topScoreToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
+            this.topScoreToolStripMenuItem.Text = "Top Score";
+            this.topScoreToolStripMenuItem.Click += new System.EventHandler(this.topScoreToolStripMenuItem_Click);
+            // 
             // pictureBox2
             // 
             this.pictureBox2.Location = new System.Drawing.Point(319, 189);
@@ -304,22 +369,6 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // lbTitle
-            // 
-            this.lbTitle.AutoSize = true;
-            this.lbTitle.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTitle.Location = new System.Drawing.Point(207, 20);
-            this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(508, 54);
-            this.lbTitle.TabIndex = 2;
-            this.lbTitle.Text = "TRÒ CHƠI ĐOÁN QUỐC KỲ";
-            this.lbTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // Clock
-            // 
-            this.Clock.Interval = 1000;
-            this.Clock.Tick += new System.EventHandler(this.Clock_Tick);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -328,6 +377,8 @@
             this.Controls.Add(this.lbTitle);
             this.Controls.Add(this.PanelControl);
             this.Controls.Add(this.PanelGamePlay);
+            this.Controls.Add(this.Menu);
+            this.MainMenuStrip = this.Menu;
             this.Name = "MainForm";
             this.Text = "Flags Guessing";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -341,6 +392,8 @@
             this.PanelGamePlay.PerformLayout();
             this.grbQuestion.ResumeLayout(false);
             this.grbQuestion.PerformLayout();
+            this.Menu.ResumeLayout(false);
+            this.Menu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -375,6 +428,11 @@
         private System.Windows.Forms.Button btnRestart;
         private System.Windows.Forms.Timer Clock;
         private System.Windows.Forms.Label lb_notification;
+        private System.Windows.Forms.MenuStrip Menu;
+        private System.Windows.Forms.ToolStripMenuItem optionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeUsernameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem topScoreToolStripMenuItem;
     }
 }
 
