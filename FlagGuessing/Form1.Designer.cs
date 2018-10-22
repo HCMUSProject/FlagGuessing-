@@ -1,6 +1,6 @@
 ﻿namespace FlagGuessing
 {
-    partial class Main
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -320,7 +320,7 @@
             this.Clock.Interval = 1000;
             this.Clock.Tick += new System.EventHandler(this.Clock_Tick);
             // 
-            // Main
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -328,7 +328,7 @@
             this.Controls.Add(this.lbTitle);
             this.Controls.Add(this.PanelControl);
             this.Controls.Add(this.PanelGamePlay);
-            this.Name = "Main";
+            this.Name = "MainForm";
             this.Text = "Flags Guessing";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.PanelControl.ResumeLayout(false);

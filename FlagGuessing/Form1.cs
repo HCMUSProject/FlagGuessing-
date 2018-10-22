@@ -15,14 +15,16 @@ using System.Xml;
 
 namespace FlagGuessing
 {
-    public partial class Main : Form
+    public partial class MainForm : Form
     {
-        public Main()
+        public MainForm()
         {
             InitializeComponent();
         }
 
         #region global Variable
+
+        string xmlHighScoreFileName = "highScore.xml";
 
         List<Flags> listFlags = new List<Flags>();
         private bool isStarted = false;
@@ -283,7 +285,24 @@ namespace FlagGuessing
 
             if (saveScore == DialogResult.Yes)  // nếu lưu
             {
-               
+                User currentUser = new User();
+                currentUser.Name = "Đỗ Minh Hiếu";
+                currentUser.Score = Convert.ToInt32(txtScore.Text);
+
+                XmlScoreUser XmlsaveScore = new XmlScoreUser();
+
+                // check file có tồn tại hay không?
+                // Nếu không tồn tại thì trực tiếp ghi ra file
+                // ngược lại thì đọc file trước
+
+                if (System.IO.File.Exists(xmlHighScoreFileName) == true)
+                {
+                    XmlsaveScore.ReadUserScore();
+                }
+
+                XmlsaveScore.addUser(currentUser);
+
+                XmlsaveScore.WriteUserScore();
             }
 
             // xoá lượt chơi, xoá notify, xoá điểm số, xoá pictureBox, xoá câu hỏi
@@ -310,9 +329,15 @@ namespace FlagGuessing
     public class XmlScoreUser
     {
         private List<User> _listUser;
-        private const string xmlHighScoreFileName = "highestScore.xml";
 
         public List<User> ListUser { get => _listUser; set => _listUser = value; }
+
+        private const string xmlHighScoreFileName = "highScore.xml";
+
+        public XmlScoreUser()
+        {
+            _listUser = new List<User>();
+        }
 
         // tối đa 5 user
 
@@ -335,23 +360,26 @@ namespace FlagGuessing
 
         public bool addUser(User usr)
         {
-            foreach (var u in _listUser)
+            if (_listUser.Count > 0)
             {
-                if (u.Name == usr.Name)
+                for (int i = 0; i < _listUser.Count; i++)
                 {
-                    if (u.Score < usr.Score)
+                    if (_listUser[i].Name == usr.Name)
                     {
-                        u.Score = usr.Score;
-                    }
-                    else
-                    {
-                        return false;
+                        if (_listUser[i].Score < usr.Score)
+                        {
+                            _listUser[i].Score = usr.Score;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                 }
-                else
-                {
-                    _listUser.Add(usr);
-                }
+            }
+            else
+            {
+                _listUser.Add(usr);
             }
 
             this.SortDecreaseScore();
@@ -369,8 +397,12 @@ namespace FlagGuessing
                 {
                     User usr = new User();
                     usr.Name = xmlReader.ReadElementContentAsString();
-                    usr.Score = Convert.ToInt32(xmlReader.GetAttribute(0));
+                    usr.Score = Convert.ToInt32(xmlReader.GetAttribute("Score"));
                     _listUser.Add(usr);
+                }
+                else
+                {
+                    xmlReader.Read();
                 }
             }
 
