@@ -94,7 +94,7 @@
             this.Controls.Add(this.txtNewName);
             this.Controls.Add(this.lbNewName);
             this.Name = "FormChangeName";
-            this.Text = "Change Name";
+            this.Text = "Change Name - Flag Guessing";
             this.Load += new System.EventHandler(this.FormChangeName_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

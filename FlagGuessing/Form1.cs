@@ -277,7 +277,9 @@ namespace FlagGuessing
 
         private void topScoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            TopHighScores highScore = new TopHighScores();
+            highScore.getFileName(xmlHighScoreFileName);
+            highScore.Show();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
